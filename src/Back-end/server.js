@@ -4,7 +4,7 @@ const dotenv = require('dotenv').config()
 const cookieParser = require('cookie-parser')
 
 const userRoutes = require ('./Routes/userRoutes')
-const orderRoutes = require('./Routes/orderRoute');
+const orderRoutes = require ('./Routes/orderRoutes')
 
 const db = require('./db')
 const cors = require('cors');
@@ -32,9 +32,7 @@ db.sequelize.sync({ alter:true }).then(() => {
 //routes for the user API
 app.use('/api/users', userRoutes)
 
-//routes for the order API
-app.use('/api/orders', orderRoutes);
-
+app.use('/api', orderRoutes);
 
 //listening to server connection
 app.listen(PORT, () => console.log(`Server is connected on ${PORT}`))

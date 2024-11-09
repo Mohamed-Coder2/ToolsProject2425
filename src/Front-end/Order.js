@@ -2,31 +2,30 @@ import React, { useState } from 'react';
 import styled from "styled-components";
 
 const Order = () => {
-  const [orderDetails, setOrderDetails] = useState({
-    package_id: '',
-    sender_name: '',
-    shipping_method: '',
-    sender_address: '',
-    tracking_number: '',
-    package_weight: 0,
-    description_of_contents: '',
-    delivery_time: '',
-    receiver_name: '',
-    shipping_date: '',
-    receiver_address: '',
-    routing_number: '',
-    package_dimensions: '',
-    declared_value: 0.0,
-    additional_notes: '',
-    uid: ''
+  const [formData, setFormData] = useState({
+    orderID: '',
+    orderDetails: '',
+    pickupLocation: '',
+    dropoffLocation: '',
+    pickupTime: '',
+    dropoffTime: '',
+    userId: ''
   });
 
   // Get user info from localStorage (logged-in user data)
-  const ID = localStorage.getItem('id');
+  const ID = localStorage.getItem('id');  // Get userId (uid) from localStorage
+
+  // Set userId when component is mounted (for formData)
+  React.useEffect(() => {
+    setFormData((prevDetails) => ({
+      ...prevDetails,
+      userId: ID,  // Set userId from localStorage
+    }));
+  }, [ID]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setOrderDetails((prevDetails) => ({
+    setFormData((prevDetails) => ({
       ...prevDetails,
       [name]: value
     }));
@@ -35,29 +34,37 @@ const Order = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const uid = localStorage.getItem('uid'); // Assuming uid is stored as uid in local storage
-
     try {
-        const response = await fetch('http://localhost:5000/api/orders/create', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${localStorage.getItem('token')}`
-            },
-            body: JSON.stringify({ ...orderDetails, uid })
-        });
+      // Send POST request to create the order
+      const response = await fetch('http://localhost:5000/api/orders', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          userId: formData.userId,  // Include userId in the request
+          orderDetails: formData.orderDetails,
+          pickupLocation: formData.pickupLocation,
+          dropoffLocation: formData.dropoffLocation,
+          pickupTime: formData.pickupTime,
+          dropoffTime: formData.dropoffTime,
+        }),
+      });
 
-        if (response.ok) {
-            console.log("Order created successfully");
-        } else {
-            console.error("Failed to create order");
-        }
+      const data = await response.json();
+
+      if (response.ok) {
+        // Successfully created order
+        alert('Order created successfully!');
+      } else {
+        // Handle API error
+        alert(`Error: ${data.message}`);
+      }
     } catch (error) {
-        console.error('Error:', error);
+      // Handle network or other errors
+      alert('An error occurred while submitting the order');
     }
   };
-
-  
 
   return (
     <StyledWrapper>
@@ -66,72 +73,21 @@ const Order = () => {
           <div className="w-1/4">
             <input
               className="input"
-              name="package_id"
-              placeholder="Package ID"
+              name="orderDetails"
+              placeholder="Order Details"
               required
               type="text"
-              value={orderDetails.package_id}
+              value={formData.orderDetails}
               onChange={handleChange}
             />
             <span className="input-border" />
             <input
               className="input"
-              name="sender_name"
-              placeholder="Sender Name"
+              name="pickupLocation"
+              placeholder="Pick-Up Location"
               required
               type="text"
-              value={orderDetails.sender_name}
-              onChange={handleChange}
-            />
-            <span className="input-border" />
-            <input
-              className="input"
-              name="shipping_method"
-              placeholder="Shipping Method"
-              required
-              type="text"
-              value={orderDetails.shipping_method}
-              onChange={handleChange}
-            />
-            <span className="input-border" />
-            <input
-              className="input"
-              name="sender_address"
-              placeholder="Sender Address"
-              required
-              type="text"
-              value={orderDetails.sender_address}
-              onChange={handleChange}
-            />
-            <span className="input-border" />
-            <input
-              className="input"
-              name="tracking_number"
-              placeholder="Tracking Number"
-              required
-              type="text"
-              value={orderDetails.tracking_number}
-              onChange={handleChange}
-            />
-            <span className="input-border" />
-            <input
-              className="input"
-              name="package_weight"
-              placeholder="Package Weight"
-              required
-              type="number"
-              step="0.01"
-              value={orderDetails.package_weight}
-              onChange={handleChange}
-            />
-            <span className="input-border" />
-            <input
-              className="input"
-              name="description_of_contents"
-              placeholder="Description of Contents"
-              required
-              type="text"
-              value={orderDetails.description_of_contents}
+              value={formData.pickupLocation}
               onChange={handleChange}
             />
             <span className="input-border" />
@@ -139,90 +95,38 @@ const Order = () => {
           <div className="w-1/4">
             <input
               className="input"
-              name="delivery_time"
-              placeholder="Delivery Time"
+              name="dropoffLocation"
+              placeholder="Drop-off Location"
+              required
+              type="text"
+              value={formData.dropoffLocation}
+              onChange={handleChange}
+            />
+            <span className="input-border" />
+            <input
+              className="input"
+              name="pickupTime"
+              placeholder="Pick-up Time"
               required
               type="date"
-              value={orderDetails.delivery_time}
+              value={formData.pickupTime}
               onChange={handleChange}
             />
             <span className="input-border" />
             <input
               className="input"
-              name="receiver_name"
-              placeholder="Receiver Name"
-              required
-              type="text"
-              value={orderDetails.receiver_name}
-              onChange={handleChange}
-            />
-            <span className="input-border" />
-            <input
-              className="input"
-              name="shipping_date"
-              placeholder="Shipping Date"
+              name="dropoffTime"
+              placeholder="Drop-off Time"
               required
               type="date"
-              value={orderDetails.shipping_date}
-              onChange={handleChange}
-            />
-            <span className="input-border" />
-            <input
-              className="input"
-              name="receiver_address"
-              placeholder="Receiver Address"
-              required
-              type="text"
-              value={orderDetails.receiver_address}
-              onChange={handleChange}
-            />
-            <span className="input-border" />
-            <input
-              className="input"
-              name="routing_number"
-              placeholder="Routing Number"
-              required
-              type="text"
-              value={orderDetails.routing_number}
-              onChange={handleChange}
-            />
-            <span className="input-border" />
-            <input
-              className="input"
-              name="package_dimensions"
-              placeholder="Package Dimensions"
-              required
-              type="text"
-              value={orderDetails.package_dimensions}
-              onChange={handleChange}
-            />
-            <span className="input-border" />
-            <input
-              className="input"
-              name="declared_value"
-              placeholder="Declared Value"
-              required
-              type="number"
-              step="0.01"
-              value={orderDetails.declared_value}
+              value={formData.dropoffTime}
               onChange={handleChange}
             />
             <span className="input-border" />
           </div>
         </div>
-        <div className="w-1/2">
-          <input
-            className="w-full text-center bg-transparent pt-12 text-white"
-            name="additional_notes"
-            placeholder="Additional Notes"
-            required
-            type="text"
-            value={orderDetails.additional_notes}
-            onChange={handleChange}
-          />
-          <span className="input-border" />
-        </div>
         <button type="submit" className="submit-button">Submit Order</button>
+        <a href='/orders' className='text-white'>My Orders</a>
       </form>
     </StyledWrapper>
   );

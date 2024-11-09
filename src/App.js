@@ -4,6 +4,7 @@ import SignUP from './Front-end/SignUP';
 import Login from './Front-end/LogIN';
 import Home from './Front-end/Home';
 import Order from './Front-end/Order';
+import MyOrders from './Front-end/MyOrders';
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
               <Route path='/login' element={<Login />} />
               <Route path='/home' element={<Home />} />
               <Route path='/order' element={<Order />} />
+              <Route path='/orders' element={<MyOrders />} />
             </Routes>
           </div>
         </Router>

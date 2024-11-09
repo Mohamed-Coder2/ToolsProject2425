@@ -1,61 +1,33 @@
-// Model/orderModel.js
-module.exports = (sequelize, DataTypes) => {
+const { DataTypes } = require('sequelize');
+
+module.exports = (sequelize) => {
   const Order = sequelize.define('Order', {
-    package_id: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    sender_name: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    shipping_method: {
-      type: DataTypes.STRING,
-    },
-    sender_address: {
-      type: DataTypes.STRING,
-    },
-    tracking_number: {
-      type: DataTypes.STRING,
-    },
-    package_weight: {
-      type: DataTypes.FLOAT,
-    },
-    description_of_contents: {
-      type: DataTypes.STRING,
-    },
-    delivery_time: {
-      type: DataTypes.STRING,
-    },
-    receiver_name: {
-      type: DataTypes.STRING,
-    },
-    shipping_date: {
-      type: DataTypes.DATE,
-    },
-    receiver_address: {
-      type: DataTypes.STRING,
-    },
-    routing_number: {
-      type: DataTypes.STRING,
-    },
-    package_dimensions: {
-      type: DataTypes.STRING,
-    },
-    declared_value: {
-      type: DataTypes.FLOAT,
-    },
-    additional_notes: {
-      type: DataTypes.TEXT,
-    },
-    uid: {
+    orderID: {
       type: DataTypes.INTEGER,
-      allowNull: false, // Foreign key for the user
+      primaryKey: true,
+      autoIncrement: true,
+    },
+    orderDetails: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    pickupLocation: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    dropoffLocation: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    pickupTime: {
+      type: DataTypes.DATE,
+      allowNull: false,
+    },
+    dropoffTime: {
+      type: DataTypes.DATE,
+      allowNull: false,
     },
   });
-
-  // Establish relationship
-  Order.belongsTo(sequelize.models.User, { foreignKey: 'uid' });
 
   return Order;
 };
