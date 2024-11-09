@@ -1,65 +1,23 @@
-// src/back-end/db.js
-const { Client } = require('pg');
+const {Sequelize, DataTypes} = require('sequelize')
 
-const client = new Client({
-  host: "localhost",
-  user: "postgres",
-  port: 5432,
-  password: "100603",
-  database: "ToolsProject"
-});
+const sequelize = new Sequelize(
+  `postgres://${process.env.DB_USER}:${process.env.DB_PASS}@localhost:${process.env.DB_PORT}/${process.env.DB_NAME}`,
+  { dialect: "postgres" }
+);
 
-client.connect();
+//checking if connection is done
+sequelize.authenticate().then(() => {
+  console.log(`Database connected to discover`)
+}).catch((err) => {
+  console.log(err)
+})
 
-// Define the addUser function to insert a new user into the database
-const addUser = async (name, email, password) => {
-  try {
-    const queryText = `
-      INSERT INTO public."User" (uname, uemail, upassword)
-      VALUES ($1, $2, $3)
-      RETURNING *;`;
-    const values = [name, email, password];
+const db = {}
+db.Sequelize = Sequelize
+db.sequelize = sequelize
 
-    const res = await client.query(queryText, values);
-    console.log("User added:", res.rows[0]);
-    return res.rows[0]; // Return the added user
-  } catch (err) {
-    if (err.code === '23505') {  // Unique violation error code
-      throw new Error("Email already exists. Please use a different email.");
-    }
-    else {
-      console.error("Error adding user:", err.message);
-    }
-    throw err;
-  }
-};
+//connecting to model
+db.users = require('./Model/userModel').default (sequelize, DataTypes)
 
-const deleteUser = async (email) => {
-  try {
-    const queryText = `DELETE FROM public."User" WHERE uemail = $1 RETURNING *;`;
-    const values = [email];
-
-    const res = await client.query(queryText, values);
-    if (res.rowCount === 0) {
-      throw new Error('No user found with that email.');
-    }
-    console.log("User deleted:", res.rows[0]);
-    return res.rows[0]; // Return the deleted user
-  } catch (err) {
-    console.error("Error deleting user:", err.message);
-    throw err;
-  }
-};
-
-// Example query to retrieve users (optional)
-const getUsers = async () => {
-  try {
-    const res = await client.query(`SELECT * FROM public."User" ORDER BY uid ASC`);
-    return res.rows;
-  } catch (err) {
-    console.error("Error retrieving users:", err.message);
-    throw err;
-  }
-};
-
-module.exports = { addUser, getUsers };
+//exporting the module
+module.exports = db

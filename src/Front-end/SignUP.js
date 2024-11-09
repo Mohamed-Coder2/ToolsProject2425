@@ -1,42 +1,63 @@
 import React from "react";
 import styled from "styled-components";
+import { useNavigate } from 'react-router-dom';
 
 const SignUP = () => {
 
-  const [Username, SetUsername] = React.useState();
-  const [Email, SetEmail] = React.useState();
-  const [Password, SetPassword] = React.useState();
+  const [formData, setFormData] = React.useState({
+    uname: '',
+    uemail: '',
+    upassword: '',
+    phoneno: ''
+  });
+
   const [Message, SetMessage] = React.useState('');
+  const [error, setError] = React.useState(null);
+  const [success, setSuccess] = React.useState(false);
+
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value
+    });
+  };
+
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError(null); // Reset error state
+    setSuccess(false); // Reset success state
 
     try {
-      const response = await fetch('http://localhost:5000/signup', {
+      const response = await fetch('http://localhost:5000/api/users/signup', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'application/json'
         },
-        body: JSON.stringify({
-          username: Username,
-          email: Email,
-          password: Password,
-        }),
+        body: JSON.stringify(formData)
       });
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || 'An error occurred');
-      }
+      if (response.ok) {
+        const result = await response.json();
+        setSuccess(true); // Set success state on successful signup
+        console.log(result)
+        SetMessage('Signup Successful')
 
-      const data = await response.json();
-      console.log('User registered:', data);
-      SetMessage('Registration Successful!');
-    }
-    catch (error) 
-    {
-      console.error('Error:', error.message);
-      SetMessage(error.message);
+        // Save user data in localStorage
+        localStorage.setItem('user', JSON.stringify(result));
+
+        // Redirect to /home
+        navigate('/home');
+      } else {
+        const errorData = await response.json();
+        setError(errorData.message || 'Signup failed');
+        SetMessage("Signup Failed")
+      }
+    } catch (error) {
+      console.error('Error during signup:', error);
+      setError('An error occurred while signing up.');
+      SetMessage("Signup Failed");
     }
   };
 
@@ -53,19 +74,29 @@ const SignUP = () => {
               type="text" 
               className="input" 
               placeholder="Full Name" 
-              onChange={(e) => SetUsername(e.target.value)} 
+              name="uname"
+              onChange={handleChange} 
             />
             <input 
               type="email" 
               className="input" 
-              placeholder="Email" 
-              onChange={(e) => SetEmail(e.target.value)} 
+              placeholder="Email"
+              name="uemail" 
+              onChange={handleChange} 
+            />
+            <input 
+              type="text" 
+              className="input" 
+              placeholder="Phone Number" 
+              name="phoneno"
+              onChange={handleChange} 
             />
             <input 
               type="password" 
               className="input" 
               placeholder="Password" 
-              onChange={(e) => SetPassword(e.target.value)} 
+              name="upassword"
+              onChange={handleChange} 
             />
           </div>
           <button type="submit">Sign up</button> {/*BUTTON IS HERE*/}

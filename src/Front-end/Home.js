@@ -1,17 +1,28 @@
-import React from "react";
-import { useLocation } from "react-router-dom";
+import React, { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
-//Home Page to display the Name and Email after a successful login
-
 const Home = () => {
-  const location = useLocation();
-  const { username, email } = location.state || {};
+  const navigate = useNavigate();
+
+  const Name = localStorage.getItem('name');
+  const ID = localStorage.getItem('id');
+  const Email = localStorage.getItem('email');
+  const Phone = localStorage.getItem('phoneno');
+
+
+  const goToOrders = () => {
+    navigate("/order");
+  };
+
 
   return (
     <StyledWrapper>
-      <h1>Welcome, {username || "User"}!</h1>
-      <p>Your email: {email || "Not provided"}</p>
+      <h1>Welcome, {Name || "User"}!</h1>
+      <p>Your email: {Email || "Not provided"}</p>
+      <p>Your phone number: {Phone || "Not provided"}</p>
+      <p>ID: {ID || "Not provided"}</p>
+      <button onClick={goToOrders}>Orders</button>
     </StyledWrapper>
   );
 };

@@ -1,40 +1,64 @@
-import React from "react";
+import React, { useState, useContext } from 'react';
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 
 const Login = () => {
-  const [Email, SetEmail] = React.useState('');
-  const [Password, SetPassword] = React.useState('');
+  const [formData, setFormData] = useState({
+    uemail: '',
+    upassword: ''
+  });
+  const [error, setError] = useState('');
   const navigate = useNavigate();
 
-  //Handle method for submitting User Data
-  const handleLogin = async (e) => {
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value
+    });
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-
+    setError(''); // Reset error message
+  
     try {
-      const response = await fetch('http://localhost:5000/login', {
+      const response = await fetch('http://localhost:5000/api/users/login', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: Email, password: Password }),
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        credentials: 'include',
+        body: JSON.stringify(formData)
       });
-
-      const data = await response.json();
-
+  
+      const result = await response.json();
+  
       if (response.ok) {
-        const { username } = data;
-        navigate('/home', { state: { username, email: Email } });
+        // Save the token and user data to localStorage
+        console.log(result)
+        localStorage.setItem('token', result.token);
+        localStorage.setItem('name', JSON.stringify(result.uname));
+        localStorage.setItem('id', JSON.stringify(result.uid));
+        localStorage.setItem('email', JSON.stringify(result.uemail));
+        localStorage.setItem('phoneno', JSON.stringify(result.phoneno));
+  
+        // Redirect to the home page on successful login
+        navigate('/home');
       } else {
-        alert(data.error);
+        setError(result.message || 'Login failed');
       }
     } catch (error) {
       console.error('Error during login:', error);
+      setError('An error occurred during login.');
     }
   };
+  
+  
 
   return (
     <StyledWrapper>
       <div className="form-container">
-        <form className="form" onSubmit={handleLogin}>
+        <form className="form" onSubmit={handleSubmit}>
           <span className="title">Log in</span>
           <span className="subtitle">
             Log into your account with your email.
@@ -42,19 +66,21 @@ const Login = () => {
           <div className="input-group">
             <input 
               type="text"
-              name="email" 
+              name="uemail" 
               id="email" 
               placeholder="Email"
-              onChange={(e) => SetEmail(e.target.value)}  
+              value={formData.uemail}
+              onChange={handleChange}
             />
           </div>
           <div className="input-group">
             <input
               type="password"
-              name="password"
+              name="upassword"
               id="password"
               placeholder="Password"
-              onChange={(e) => SetPassword(e.target.value)}
+              value={formData.upassword}
+              onChange={handleChange}
             />
             <div className="forgot">
               <a rel="noopener noreferrer" href="#">
@@ -64,6 +90,7 @@ const Login = () => {
           </div>
           <button type="submit" className="sign">Log in</button>
         </form>
+        <p>{error}</p>
         <p className="signup pt-4">
           Don&apos;t have an account?
           <a rel="noopener noreferrer" href="/signup" className="text-black">
