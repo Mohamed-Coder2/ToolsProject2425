@@ -69,10 +69,9 @@ const Order = () => {
   return (
     <StyledWrapper>
       <form onSubmit={handleSubmit} className="w-full flex flex-col items-center">
-        <div className="form flex w-full items-center justify-center">
-          <div className="w-1/4">
+          <div className='w-1/2 text-center textInputWrapper'>
             <input
-              className="input"
+              className="textInput mb-4 w-full"
               name="orderDetails"
               placeholder="Order Details"
               required
@@ -80,9 +79,11 @@ const Order = () => {
               value={formData.orderDetails}
               onChange={handleChange}
             />
-            <span className="input-border" />
+          </div>
+        <div className="form flex w-full items-center justify-center">
+          <div className="textInputWrapper w-1/4">
             <input
-              className="input"
+              className="textInput mb-4"
               name="pickupLocation"
               placeholder="Pick-Up Location"
               required
@@ -91,30 +92,8 @@ const Order = () => {
               onChange={handleChange}
             />
             <span className="input-border" />
-          </div>
-          <div className="w-1/4">
             <input
-              className="input"
-              name="dropoffLocation"
-              placeholder="Drop-off Location"
-              required
-              type="text"
-              value={formData.dropoffLocation}
-              onChange={handleChange}
-            />
-            <span className="input-border" />
-            <input
-              className="input"
-              name="pickupTime"
-              placeholder="Pick-up Time"
-              required
-              type="date"
-              value={formData.pickupTime}
-              onChange={handleChange}
-            />
-            <span className="input-border" />
-            <input
-              className="input"
+              className="textInput"
               name="dropoffTime"
               placeholder="Drop-off Time"
               required
@@ -124,69 +103,181 @@ const Order = () => {
             />
             <span className="input-border" />
           </div>
+          <div className="textInputWrapper w-1/4">
+            <input
+              className="textInput mb-4"
+              name="dropoffLocation"
+              placeholder="Drop-off Location"
+              required
+              type="text"
+              value={formData.dropoffLocation}
+              onChange={handleChange}
+            />
+            <span className="input-border" />
+            <input
+              className="textInput "
+              name="pickupTime"
+              placeholder="Pick-up Time"
+              required
+              type="date"
+              value={formData.pickupTime}
+              onChange={handleChange}
+            />
+            <span className="input-border" />
+          </div>
         </div>
-        <button type="submit" className="submit-button">Submit Order</button>
-        <a href='/orders' className='text-white'>My Orders</a>
+        <div className='flex mt-4 w-1/2 justify-between'>
+          <button type="submit" className="btn">Submit Order</button>
+          <a href='/orders' className='btn'>My Orders</a>
+        </div>
       </form>
     </StyledWrapper>
   );
 };
 
 const StyledWrapper = styled.div`
-  .form {
-    --width-of-input: 200px;
-    --border-height: 1px;
-    --border-before-color: rgba(221, 221, 221, 0.39);
-    --border-after-color: #5891ff;
-    --input-hovered-color: #4985e01f;
+  input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: invert(38%) sepia(11%) saturate(3494%) hue-rotate(265deg) brightness(87%) contrast(92%);
   }
-  /* styling of Input */
-  .input {
-    color: #fff;
-    font-size: 0.9rem;
-    background-color: transparent;
-    width: 90%;
-    box-sizing: border-box;
-    padding-inline: 0.5em;
-    padding-block: 0.7em;
-    border: none;
-    border-bottom: var(--border-height) solid var(--border-before-color);
+
+  .btn {
+   --color: #A63F8A;
+   padding: 0.8em 1.7em;
+   background-color: transparent;
+   border-radius: .3em;
+   position: relative;
+   overflow: hidden;
+   cursor: pointer;
+   transition: .5s;
+   font-weight: 400;
+   font-size: 17px;
+   border: 1px solid;
+   font-family: inherit;
+   text-transform: uppercase;
+   color: var(--color);
+   z-index: 1;
   }
-  /* styling of animated border */
-  .input-border {
-    position: absolute;
-    background: var(--border-after-color);
-    width: 0%;
-    height: 2px;
-    bottom: 0;
+
+  .btn::before, .btn::after {
+   content: '';
+   display: block;
+   width: 50px;
+   height: 50px;
+   transform: translate(-50%, -50%);
+   position: absolute;
+   border-radius: 50%;
+   z-index: -1;
+   background-color: var(--color);
+   transition: 1s ease;
+  }
+
+  .btn::before {
+   top: -1em;
+   left: -1em;
+  }
+
+  .btn::after {
+   left: calc(100% + 1em);
+   top: calc(100% + 1em);
+  }
+
+  .btn:hover::before, .btn:hover::after {
+   height: 410px;
+   width: 410px;
+  }
+
+  .btn:hover {
+   color: white;
+  }
+
+  .btn:active {
+   filter: brightness(.8);
+  }
+
+  .textInputWrapper:before {
+    transition: border-bottom-color 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.42);
+  }
+
+  .textInputWrapper:before,
+  .textInputWrapper:after {
+    content: "";
     left: 0;
-    transition: 0.3s;
+    right: 0;
+    position: absolute;
+    pointer-events: none;
+    bottom: -1px;
+    z-index: 4;
+    width: 100%;
   }
-  /* Hover on Input */
-  input:hover {
-    background: var(--input-hovered-color);
+
+  .textInputWrapper:focus-within:before {
+    border-bottom: 1px solid var(--accent-color);
   }
-  input:focus {
+
+  .textInputWrapper:before {
+    transition: border-bottom-color 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.42);
+  }
+
+  .textInputWrapper:focus-within:before {
+    border-bottom: 1px solid var(--accent-color);
+    transform: scaleX(1);
+  }
+
+  .textInputWrapper:focus-within:after {
+    border-bottom: 2px solid var(--accent-color);
+    transform: scaleX(1);
+  }
+
+  .textInputWrapper:after {
+    content: "";
+    transform: scaleX(0);
+    transition: transform 250ms cubic-bezier(0, 0, 0.2, 1) 0ms;
+    will-change: transform;
+    border-bottom: 2px solid var(--accent-color);
+    border-bottom-color: var(--accent-color);
+  }
+
+  .textInput::placeholder {
+    transition: opacity 250ms cubic-bezier(0, 0, 0.2, 1) 0ms;
+    opacity: 1;
+    user-select: none;
+    color: rgba(255, 255, 255, 0.582);
+  }
+
+  .textInputWrapper .textInput {
+    border-radius: 5px 5px 0px 0px;
+    box-shadow: 0px 2px 5px rgb(35 35 35 / 30%);
+    max-height: 36px;
+    background-color: #252525;
+    transition-timing-function: cubic-bezier(0.25, 0.8, 0.25, 1);
+    transition-duration: 200ms;
+    transition-property: background-color;
+    color: #e8e8e8;
+    font-size: 14px;
+    font-weight: 500;
+    padding: 12px;
+    width: 100%;
+    border-left: none;
+    border-bottom: none;
+    border-right: none;
+  }
+
+  .textInputWrapper .textInput:focus,
+  .textInputWrapper .textInput:active {
     outline: none;
   }
-  /* here is code of animated border */
-  input:focus ~ .input-border {
-    width: 80%;
+
+  .textInputWrapper:focus-within .textInput,
+  .textInputWrapper .textInput:focus,
+  .textInputWrapper .textInput:active {
+    background-color: #353535;
   }
-  .submit-button {
-    margin-top: 20px;
-    padding: 10px 20px;
-    font-size: 1rem;
-    color: #fff;
-    background-color: #5891ff;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-  }
-  .submit-button:hover {
-    background-color: #3a70cc;
-  }
+
+  .textInputWrapper:focus-within .textInput::placeholder {
+    opacity: 0;
+  
 `;
 
 export default Order;

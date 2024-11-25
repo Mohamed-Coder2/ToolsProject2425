@@ -5,6 +5,8 @@ import Login from './Front-end/LogIN';
 import Home from './Front-end/Home';
 import Order from './Front-end/Order';
 import MyOrders from './Front-end/MyOrders';
+import AssignedOrdersPage from './Front-end/CourierOrders';
+import ManageOrdersPage from './Front-end/Admin';
 
 function App() {
   return (
@@ -17,6 +19,8 @@ function App() {
               <Route path='/home' element={<Home />} />
               <Route path='/order' element={<Order />} />
               <Route path='/orders' element={<MyOrders />} />
+              <Route path='/courier' element={<AssignedOrdersPage />} />
+              <Route path='/admin' element={<ManageOrdersPage />} />
             </Routes>
           </div>
         </Router>

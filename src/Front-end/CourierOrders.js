@@ -56,6 +56,7 @@ const AssignedOrdersPage = () => {
 export default AssignedOrdersPage;
 
 const StyledWrapper = styled.div`
+  color: white;
   padding: 20px;
   .orders-container {
     display: flex;

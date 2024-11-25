@@ -58,6 +58,7 @@ const ManageOrdersPage = () => {
 export default ManageOrdersPage;
 
 const StyledWrapper = styled.div`
+  color: white;
   padding: 20px;
   table {
     width: 100%;
@@ -79,5 +80,6 @@ const StyledWrapper = styled.div`
   }
   button:hover {
     background-color: #3a70cc;
+    cursor: pointer;
   }
 `;
