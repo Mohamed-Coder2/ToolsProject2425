@@ -1,6 +1,7 @@
 import React, { useState, useContext } from 'react';
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
+import userSession from '../userSession';
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -34,13 +35,18 @@ const Login = () => {
       const result = await response.json();
   
       if (response.ok) {
-        // Save the token and user data to localStorage
+        // Save the token and user data to userSession object
         console.log(result)
-        localStorage.setItem('token', result.token); // NULL
-        localStorage.setItem('name', JSON.stringify(result.uname));
-        localStorage.setItem('id', JSON.stringify(result.uid));
-        localStorage.setItem('email', JSON.stringify(result.uemail));
-        localStorage.setItem('phoneno', JSON.stringify(result.phoneno));
+        localStorage.setItem('token',result.user.token); // NULL
+        localStorage.setItem('name', JSON.stringify(result.user.uname));
+        localStorage.setItem('id', JSON.stringify(result.user.uid));
+        localStorage.setItem('email', JSON.stringify(result.user.uemail));
+        localStorage.setItem('phoneno', JSON.stringify(result.user.phoneno));
+        // userSession.token = result.user.token;
+        // userSession.name = result.user.uname;
+        // userSession.id = result.user.uid;
+        // userSession.email = result.user.uemail;
+        // userSession.phoneno = result.user.phoneno;
   
         // Redirect to the home page on successful login
         navigate('/home');

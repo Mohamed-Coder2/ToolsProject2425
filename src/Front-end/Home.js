@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import userSession from "../userSession";
 
 const Home = () => {
   const navigate = useNavigate();
@@ -9,7 +10,6 @@ const Home = () => {
   const ID = localStorage.getItem('id');
   const Email = localStorage.getItem('email');
   const Phone = localStorage.getItem('phoneno');
-
 
   const goToOrders = () => {
     navigate("/order");

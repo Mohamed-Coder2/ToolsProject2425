@@ -1,6 +1,8 @@
+require('dotenv').config();
+
 const { Sequelize, DataTypes } = require('sequelize');
 const sequelize = new Sequelize(
-  `postgres://${process.env.DB_USER}:${process.env.DB_PASS}@localhost:${process.env.DB_PORT}/${process.env.DB_NAME}`,
+  `postgres://postgres:100603@db:5432/ToolsProject`,
   { dialect: 'postgres' }
 );
 
@@ -15,8 +17,8 @@ db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 
 // Import models
-db.users = require('./Model/userModel').default (sequelize, DataTypes);
-db.orders = require('./Model/orderModel')(sequelize, DataTypes);
+db.users = require('./Model/userModel.js')(sequelize, DataTypes);
+db.orders = require('./Model/orderModel.js')(sequelize, DataTypes);
 
 // Define associations
 db.users.hasMany(db.orders, { foreignKey: 'userId', sourceKey: 'uid', onDelete: 'CASCADE' });

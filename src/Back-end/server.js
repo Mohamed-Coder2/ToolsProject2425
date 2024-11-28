@@ -10,7 +10,7 @@ const db = require('./db')
 const cors = require('cors');
 
 //setting up your port
-const PORT = process.env.ServerPORT || 8080
+const PORT = process.env.ServerPORT || 5000
 
 //assigning the variable app to express
 const app = express()
@@ -28,6 +28,13 @@ app.use(cors({
 db.sequelize.sync({ alter:true }).then(() => {
     console.log("db has been re sync")
 })
+
+app.get('/api/test', (req, res) => {
+    res.status(200).json({
+      message: 'Backend is up and running!',
+      success: true,
+    });
+  });
 
 //routes for the user API
 app.use('/api/users', userRoutes)
