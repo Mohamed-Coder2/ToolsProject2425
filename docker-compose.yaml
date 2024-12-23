@@ -8,7 +8,7 @@ services:
       POSTGRES_PASSWORD: 100603
       POSTGRES_DB: ToolsProject
     ports:
-      - "5433:5432" # Exposing the database port
+      - "5433:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
     networks:
@@ -36,9 +36,9 @@ services:
     image: react-frontend
     container_name: react-frontend
     build:
-      context: ./ # Path to your frontend source code
+      context: ./
     ports:
-      - "3000:3000" # Map frontend port to host
+      - "3000:3000"
     depends_on:
       - backend
     networks:

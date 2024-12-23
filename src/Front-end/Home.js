@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import userSession from "../userSession";
 
 const Home = () => {
   const navigate = useNavigate();

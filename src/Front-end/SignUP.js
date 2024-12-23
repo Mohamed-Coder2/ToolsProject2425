@@ -30,7 +30,7 @@ const SignUP = () => {
     setSuccess(false); // Reset success state
 
     try {
-      const response = await fetch('http://localhost:5000/api/users/signup', {
+      const response = await fetch('https://tools-back-end-git-mo-emad-dev.apps.rm3.7wse.p1.openshiftapps.com/api/users/signup', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

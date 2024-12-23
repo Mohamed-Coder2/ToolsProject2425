@@ -36,7 +36,7 @@ const Order = () => {
 
     try {
       // Send POST request to create the order
-      const response = await fetch('http://localhost:5000/api/orders', {
+      const response = await fetch('https://tools-back-end-git-mo-emad-dev.apps.rm3.7wse.p1.openshiftapps.com/api/orders', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

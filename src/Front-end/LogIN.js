@@ -1,7 +1,6 @@
 import React, { useState, useContext } from 'react';
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
-import userSession from '../userSession';
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -23,7 +22,7 @@ const Login = () => {
     setError(''); // Reset error message
   
     try {
-      const response = await fetch('http://localhost:5000/api/users/login', {
+      const response = await fetch('https://tools-back-end-git-mo-emad-dev.apps.rm3.7wse.p1.openshiftapps.com/api/users/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -42,11 +41,6 @@ const Login = () => {
         localStorage.setItem('id', JSON.stringify(result.user.uid));
         localStorage.setItem('email', JSON.stringify(result.user.uemail));
         localStorage.setItem('phoneno', JSON.stringify(result.user.phoneno));
-        // userSession.token = result.user.token;
-        // userSession.name = result.user.uname;
-        // userSession.id = result.user.uid;
-        // userSession.email = result.user.uemail;
-        // userSession.phoneno = result.user.phoneno;
   
         // Redirect to the home page on successful login
         navigate('/home');
