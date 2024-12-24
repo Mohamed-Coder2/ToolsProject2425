@@ -7,7 +7,7 @@ const ManageOrdersPage = () => {
   // Fetch all orders from backend (example API call)
   useEffect(() => {
     const fetchOrders = async () => {
-      const response = await fetch('https://tools-back-end-git-mo-emad-dev.apps.rm3.7wse.p1.openshiftapps.com/api/all-orders');
+      const response = await fetch('https://tools-back-end-mo-emad-dev.apps.rm3.7wse.p1.openshiftapps.com/api/all-orders');
       const data = await response.json();
       setOrders(data);
     };

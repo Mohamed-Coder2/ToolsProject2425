@@ -22,7 +22,7 @@ const Login = () => {
     setError(''); // Reset error message
   
     try {
-      const response = await fetch('https://tools-back-end-git-mo-emad-dev.apps.rm3.7wse.p1.openshiftapps.com/api/users/login', {
+      const response = await fetch('https://tools-back-end-mo-emad-dev.apps.rm3.7wse.p1.openshiftapps.com/api/users/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

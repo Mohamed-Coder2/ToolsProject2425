@@ -9,7 +9,7 @@ const UpdateOrderStatusPage = () => {
     e.preventDefault();
 
     // Make an API call to update the order status
-    const response = await fetch('https://tools-back-end-git-mo-emad-dev.apps.rm3.7wse.p1.openshiftapps.com/api/update-order-status', {
+    const response = await fetch('https://tools-back-end-mo-emad-dev.apps.rm3.7wse.p1.openshiftapps.com/api/update-order-status', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ orderId, status }),
